@@ -1,0 +1,34 @@
+TASK 6 - START AND ACCESS JENKINS
+
+Open PowerShell in this folder and run:
+  .\Start-Task6.ps1
+
+The script starts Docker Compose, retains Jenkins state in the jenkins_home
+volume, and asks Docker for an available host port. Copy the displayed URL or
+read jenkins-url.txt. If Docker says it is not running, start Docker Desktop and
+rerun the same command. On initial setup, copy the administrator password
+printed by the script into the Jenkins unlock page.
+
+Stop Jenkins but keep its configuration:
+  docker compose down
+
+Start it again:
+  .\Start-Task6.ps1
+
+LIVE MULTIBRANCH CHECKLIST
+1. Push this project to a GitHub repository you own.
+2. Install Jenkins plugins: Pipeline: Multibranch and GitHub Branch Source.
+3. Store a least-privilege GitHub token in Jenkins Credentials (Secret Text).
+4. New Item > Multibranch Pipeline > Branch Sources > GitHub; select repository
+   and stored credential; enable branch discovery; Save.
+5. Scan Multibranch Pipeline Now.
+6. Push a branch with a root Jenkinsfile. For a helper workflow:
+  .\Create-FeatureBranch.ps1 -RemoteUrl 'https://github.com/OWNER/REPO.git'
+7. Scan again and verify the branch child-job and Build, Test, Package stages.
+
+The local package is not connected to a GitHub repository until you supply the
+repository URL and credentials through Jenkins' secure UI. Do not paste tokens
+into these commands or commit them. Docker Compose allocates a host port; this
+avoids common collisions, although no local port choice can prevent a different
+process from changing machine state later. Re-run the launcher to display the
+current mapped URL.
